@@ -44,12 +44,12 @@ namespace Accounting.App
             using (UnitOfWork db = new UnitOfWork())
             {
                 var result = db.AccountingRepository.Get(a => a.TypeID == TypeID);
-         
-              dgReport.Rows.Clear();
+
+                dgReport.Rows.Clear();
                 foreach (var accounting in result)
                 {
                     string customerName = db.CustomerRepository.GetCustomerNameById(accounting.CostomerID);
-                    dgReport.Rows.Add(accounting.ID, customerName, accounting.Amount, accounting.DateTitle.ToShamsi(),accounting.Description);
+                    dgReport.Rows.Add(accounting.ID, customerName, accounting.Amount, accounting.DateTitle.ToShamsi(), accounting.Description);
                 }
             }
 
@@ -72,6 +72,22 @@ namespace Accounting.App
                     {
                         db.AccountingRepository.Delete(id);
                         db.Save();
+                        Filter();
+                    }
+                }
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            {
+                if (dgReport.CurrentRow != null)
+                {
+                    int id = int.Parse(dgReport.CurrentRow.Cells[0].Value.ToString());
+frmNewAccounting frmNew = new frmNewAccounting();
+                    frmNew.AccountID = id;
+                    if(frmNew.ShowDialog() == DialogResult.OK)
+                    {
                         Filter();
                     }
                 }
